@@ -30,6 +30,7 @@ namespace ArtBot
 
             //event subscriptions
             _client.Log += Log;
+            _client.UserJoined += AnnounceUserJoined;
 
             await RegisterCommandAsync();
 
@@ -38,6 +39,13 @@ namespace ArtBot
             await _client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private async Task AnnounceUserJoined(SocketGuildUser user)
+        {
+            var guild = user.Guild;
+            var channel = guild.DefaultChannel;
+            await channel.SendMessageAsync($"Welcome, {user.Mention}");
         }
 
         private Task Log(LogMessage arg)
